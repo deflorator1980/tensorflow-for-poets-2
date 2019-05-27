@@ -1,20 +1,57 @@
-# Overview
 
-This repo contains code for the "TensorFlow for poets 2" series of codelabs.
+# Pathology detection in chest X-ray
 
-There are multiple versions of this codelab depending on which version 
-of the tensorflow libraries you plan on using:
+## Usage (Chest X-rays in forlder radiographs)
+```
+python3 label_image.py 
+```
+ or
+```
+python3 scripts/lable_image.py --image radiographs/1545.jpg 
+```
 
-* For [TensorFlow Lite](https://www.tensorflow.org/mobile/tflite/) the new, ground up rewrite targeted at mobile devices
-  use [this version of the codelab](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets-2-tflite) 
-* For the more mature [TensorFlow Mobile](https://www.tensorflow.org/mobile/mobile_intro) use 
-  [this version of the codealab](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets-2).
+## Train default (depricated)
+```
+python3 -m scripts.retrain \
+  --bottleneck_dir=tf_files/bottlenecks \
+  --how_many_training_steps=500 \
+  --model_dir=tf_files/models/ \
+  --summaries_dir=tf_files/training_summaries/"${ARCHITECTURE}" \
+  --output_graph=tf_files/retrained_graph.pb \
+  --output_labels=tf_files/retrained_labels.txt \
+  --architecture="${ARCHITECTURE}" \
+  --image_dir=TWO_DS
+```
 
+## Train advanced
+```
+python3 -m scripts.retrain \
+  --bottleneck_dir=tf_files/bottlenecks \
+  --learning_rate=0.001 \
+  --how_many_training_steps=5000 \
+  --model_dir=tf_files/models/ \
+  --summaries_dir=tf_files/training_summaries/"${ARCHITECTURE}" \
+  --output_graph=tf_files/retrained_graph.pb \
+  --output_labels=tf_files/retrained_labels.txt \
+  --architecture="${ARCHITECTURE}" \
+  --image_dir=TWO_DS
+```
 
-This repo contains simplified and trimmed down version of tensorflow's example image classification apps.
+Library:
+https://github.com/googlecodelabs/tensorflow-for-poets-2
 
-* The TensorFlow Lite version, in `android/tflite`, comes from [tensorflow/contrib/lite/](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/lite).
-* The Tensorflow Mobile version, in `android/tfmobile`, comes from [tensorflow/examples/android/](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android).
+Data set:
+https://ceb.nlm.nih.gov/repositories/tuberculosis-chest-x-ray-image-data-sets/
 
-The `scripts` directory contains helpers for the codelab. Some of these come from the main TensorFlow repository, and are included here so you can use them without also downloading the main TensorFlow repo (they are not part of the TensorFlow `pip` installation).
+To fix "tensorflow:Couldn't understand architecture name '' " 
+```
+IMAGE_SIZE=224
+ARCHITECTURE="mobilenet_0.50_${IMAGE_SIZE}"
+```
 
+## Todo
+```
+https://neurohive.io/ru/tutorial/image-recognition-training-inception-v3/
+
+Try other model, on other params and pictures
+```
